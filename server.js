@@ -1,14 +1,13 @@
 const express = require('express');
 const mysql = require('mysql');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express(); // Initialize the express app
 const port = process.env.PORT || 3308; // Use the port from Render or default to 3308
 
 app.use(cors()); // Use CORS middleware
-app.use(bodyParser.json()); // Middleware to parse JSON request bodies
-app.use(bodyParser.urlencoded({ extended: true })); // Middleware to parse URL-encoded request bodies
+app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded request bodies
 
 // Create connection to MySQL using environment variables
 const connection = mysql.createConnection({
@@ -16,14 +15,14 @@ const connection = mysql.createConnection({
     user: process.env.DB_USER,     // Use environment variable for username
     password: process.env.DB_PASSWORD, // Use environment variable for password
     database: process.env.DB_NAME, // Use environment variable for database name
-    port: 3306, // MySQL port (default is 3306)
+    port: 3307, // MySQL port (default is 3306)
 });
 
 // Connect to the database
 connection.connect((err) => {
     if (err) {
         console.error('Error connecting to the database: ', err);
-        return;
+        process.exit(1); // Exit if the connection fails
     }
     console.log('Connected to the MySQL database!');
 });
