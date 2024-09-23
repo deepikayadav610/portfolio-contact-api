@@ -9,13 +9,16 @@ app.use(cors()); // Use CORS middleware
 app.use(express.json()); // Middleware to parse JSON request bodies
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded request bodies
 
+// Determine if using local or hosted database
+const isLocal = process.env.DB_ENV === 'local'; // Set this environment variable accordingly
+
 // Create connection to MySQL using environment variables
 const connection = mysql.createConnection({
-    host: process.env.DB_HOST,     // Use environment variable for the host
-    user: process.env.DB_USER,     // Use environment variable for username
-    password: process.env.DB_PASSWORD, // Use environment variable for password
-    database: process.env.DB_NAME, // Use environment variable for database name
-    port: 3306, // MySQL port (default is 3306)
+    host: isLocal ? 'localhost' : 'sql12.freemysqlhosting.net', // Use localhost for local, hosted server otherwise
+    user: isLocal ? 'root' : 'sql12732788', // Update as necessary for local username
+    password: isLocal ? '' : 'iQzDlzu7vQ', // Replace with your local password
+    database: isLocal ? 'portfolio_api' : 'sql12732788', // Replace with your local database name
+    port: isLocal ? 3307 : 3306 // Use 3307 for local MySQL, 3306 for hosted
 });
 
 // Connect to the database
